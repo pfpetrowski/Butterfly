@@ -38,8 +38,8 @@ from keras import layers
 
 
 model = models.Sequential()
-model.add(layers.Flatten())
-model.add(layers.Dense(1000, activation = 'relu', input_shape = (200,200,1)))
+model.add(layers.Flatten(input_shape = (200,200,1)))
+model.add(layers.Dense(1000, activation = 'relu'))
 model.add(layers.Dense(2000, activation = 'relu'))
 model.add(layers.Dense(3000, activation = 'relu'))
 model.add(layers.Dense(4000, activation = 'relu'))
@@ -67,5 +67,4 @@ model.fit_generator(
 	validation_data = valdata,
 	validation_steps = 1,
 	shuffle = True)
-
 
