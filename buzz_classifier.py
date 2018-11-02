@@ -3,12 +3,20 @@ from keras.preprocessing.image import ImageDataGenerator
 
 
 
-images = ImageDataGenerator(rescale = 1./255)
+train_images = ImageDataGenerator(
+	rescale = 1./255,
+	horizontal_flip = True,
+	fill_mode = 'nearest',
+	width_shift_range = [-0.5,0])
 
-traindata = images.flow_from_directory(
+val_images = ImageDataGenerator(rescale = 1./255)
+
+
+
+traindata = train_images.flow_from_directory(
 	'./Spectrograms/Train',
 	color_mode = 'grayscale',
-	#target_size = (513, 800),
+	target_size = (200, 200),
 	batch_size = 30,
 	class_mode = 'binary')
 
@@ -20,11 +28,11 @@ traindata = images.flow_from_directory(
 # 	break
 
 
-valdata = images.flow_from_directory(
+valdata = val_images.flow_from_directory(
 	'./Spectrograms/Validate',
 	color_mode = 'grayscale',
-	#target_size = (513, 800),
-	batch_size = 30,
+	target_size = (200, 200),
+	batch_size = 20,
 	class_mode = 'binary')
 
 from keras import models
@@ -34,11 +42,11 @@ from keras import layers
 
 
 model = models.Sequential()
-model.add(layers.Conv2D(12, (4,4), activation = 'relu', input_shape = (256,256,1)))
+model.add(layers.Conv2D(12, (2,2), activation = 'relu', input_shape = (200,200,1)))
 model.add(layers.MaxPooling2D((2,2)))
-model.add(layers.Conv2D(24, (4,4), activation = 'relu'))
+model.add(layers.Conv2D(24, (2,2), activation = 'relu'))
 model.add(layers.MaxPooling2D((2,2)))
-model.add(layers.Conv2D(24, (4,4), activation = 'relu'))
+model.add(layers.Conv2D(24, (2,2), activation = 'relu'))
 model.add(layers.Flatten())
 model.add(layers.Dense(24, activation = 'relu'))
 model.add(layers.Dense(1, activation = 'softmax'))
@@ -54,8 +62,8 @@ model.compile(
 	)
 model.fit_generator(
 	traindata,
-	steps_per_epoch = 6,
-	epochs = 100,
+	steps_per_epoch = 3,
+	epochs = 1000,
 	validation_data = valdata,
 	validation_steps = 1)
 
