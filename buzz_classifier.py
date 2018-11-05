@@ -66,16 +66,6 @@ model.add(layers.Dense(32, activation = 'relu'))
 model.add(layers.Dense(1, activation = 'sigmoid'))
 
 
-# model.add(layers.Flatten(input_shape = (100,100,1)))
-# model.add(layers.Dense(200, activation = 'relu'))
-# model.add(layers.Dense(300, activation = 'relu'))
-# model.add(layers.Dense(400, activation = 'relu'))
-# model.add(layers.Dense(500, activation = 'relu'))
-# model.add(layers.Dense(400, activation = 'relu'))
-# model.add(layers.Dense(300, activation = 'relu'))
-# model.add(layers.Dense(200, activation = 'relu'))
-# model.add(layers.Dense(100, activation = 'relu'))
-# model.add(layers.Dense(1, activation = 'softmax'))
 
 model.summary()
 # quit()
@@ -90,8 +80,22 @@ model.compile(
 model.fit_generator(
 	traindata,
 	steps_per_epoch = 10,
-	epochs = 1000,
+	epochs = 10,
 	validation_data = valdata,
 	validation_steps = 5,
 	shuffle = True)
 
+
+test_images = ImageDataGenerator(rescale=1./255)
+testdata = val_images.flow_from_directory(
+	'./Spectrograms/Test',
+	color_mode = 'grayscale',
+	target_size = (100, 100),
+	batch_size = 32,
+	class_mode = 'binary')
+
+
+quit()
+results = model.predict(testdata)
+
+print(results)
