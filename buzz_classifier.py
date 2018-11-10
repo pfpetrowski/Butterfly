@@ -12,24 +12,24 @@ val_images = ImageDataGenerator(
 	)
 
 traindata = train_images.flow_from_directory(
-	'./Spectrograms/FullRes/Train',
+	'./Spectrograms/Noisered1s/Train',
 	color_mode = 'grayscale',
-	target_size = (100, 100),
+	target_size = (200, 800),
 	batch_size = 64,
 	class_mode = 'binary')
 
 
 valdata = val_images.flow_from_directory(
-	'./Spectrograms/FullRes/Validate',
+	'./Spectrograms/Noisered1s/Validate',
 	color_mode = 'grayscale',
-	target_size = (100, 100),
+	target_size = (200, 800),
 	batch_size = 32,
 	class_mode = 'binary')
 
-# import numpy
-# numpy.set_printoptions(threshold=numpy.nan)
-# import matplotlib.pyplot as plt
-# from keras.preprocessing import image
+import numpy
+numpy.set_printoptions(threshold=numpy.nan)
+import matplotlib.pyplot as plt
+from keras.preprocessing import image
 
 # # for i, j in valdata:
 # # 	print(i[9,:,:,0].round(1))
@@ -53,7 +53,7 @@ from keras import layers
 
 
 model = models.Sequential()
-model.add(layers.Conv2D(3, (2,2), activation = 'relu', input_shape = (100,100,1), padding = 'same'))
+model.add(layers.Conv2D(3, (2,2), activation = 'relu', input_shape = (200,800,1), padding = 'same'))
 model.add(layers.BatchNormalization())
 model.add(layers.MaxPooling2D((2,2)))
 model.add(layers.Conv2D(6, (2,2), activation = 'relu', padding = 'same'))
@@ -81,7 +81,7 @@ model.compile(
 model.fit_generator(
 	traindata,
 	steps_per_epoch = 10,
-	epochs = 100,
+	epochs = 50,
 	validation_data = valdata,
 	validation_steps = 5,
 	shuffle = True)
@@ -89,9 +89,9 @@ model.fit_generator(
 
 test_images = ImageDataGenerator(rescale=1./255)
 testdata = val_images.flow_from_directory(
-	'./Spectrograms/FullRes/Test',
+	'./Spectrograms/Noisered1s/Test',
 	color_mode = 'grayscale',
-	target_size = (100, 100),
+	target_size = (200, 800),
 	batch_size = 123,
 	class_mode = 'binary')
 
