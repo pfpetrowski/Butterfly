@@ -12,17 +12,17 @@ val_images = ImageDataGenerator(
 	)
 
 traindata = train_images.flow_from_directory(
-	'./Spectrograms/Noisered1s/Train',
+	'./Spectrograms/Noisered100ms/Train',
 	color_mode = 'grayscale',
-	target_size = (200, 800),
+	target_size = (100, 100),
 	batch_size = 64,
 	class_mode = 'binary')
 
 
 valdata = val_images.flow_from_directory(
-	'./Spectrograms/Noisered1s/Validate',
+	'./Spectrograms/Noisered100ms/Validate',
 	color_mode = 'grayscale',
-	target_size = (200, 800),
+	target_size = (100, 100),
 	batch_size = 32,
 	class_mode = 'binary')
 
@@ -53,7 +53,7 @@ from keras import layers
 
 
 model = models.Sequential()
-model.add(layers.Conv2D(3, (2,2), activation = 'relu', input_shape = (200,800,1), padding = 'same'))
+model.add(layers.Conv2D(3, (2,2), activation = 'relu', input_shape = (100,100,1), padding = 'same'))
 model.add(layers.BatchNormalization())
 model.add(layers.MaxPooling2D((2,2)))
 model.add(layers.Conv2D(6, (2,2), activation = 'relu', padding = 'same'))
@@ -81,7 +81,7 @@ model.compile(
 model.fit_generator(
 	traindata,
 	steps_per_epoch = 10,
-	epochs = 50,
+	epochs = 10,
 	validation_data = valdata,
 	validation_steps = 5,
 	shuffle = True)
@@ -89,9 +89,9 @@ model.fit_generator(
 
 test_images = ImageDataGenerator(rescale=1./255)
 testdata = val_images.flow_from_directory(
-	'./Spectrograms/Noisered1s/Test',
+	'./Spectrograms/Noisered100ms/Test',
 	color_mode = 'grayscale',
-	target_size = (200, 800),
+	target_size = (100, 100),
 	batch_size = 123,
 	class_mode = 'binary')
 
@@ -104,3 +104,6 @@ results = model.evaluate_generator(
 
 print(model.metrics_names)
 print(results)
+
+
+#model.save('100msWindow.h5')
