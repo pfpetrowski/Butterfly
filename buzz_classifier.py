@@ -12,7 +12,7 @@ val_images = ImageDataGenerator(
 	)
 
 traindata = train_images.flow_from_directory(
-	'./Spectrograms/Noisered100ms/Train',
+	'./Data/1sSpectrograms/Train',
 	color_mode = 'grayscale',
 	target_size = (100, 100),
 	batch_size = 64,
@@ -20,7 +20,7 @@ traindata = train_images.flow_from_directory(
 
 
 valdata = val_images.flow_from_directory(
-	'./Spectrograms/Noisered100ms/Validate',
+	'./Data/1sSpectrograms/Validate',
 	color_mode = 'grayscale',
 	target_size = (100, 100),
 	batch_size = 32,
@@ -89,7 +89,7 @@ model.fit_generator(
 
 test_images = ImageDataGenerator(rescale=1./255)
 testdata = val_images.flow_from_directory(
-	'./Spectrograms/Noisered100ms/Test',
+	'./Data/1sSpectrograms/Test',
 	color_mode = 'grayscale',
 	target_size = (100, 100),
 	batch_size = 123,
