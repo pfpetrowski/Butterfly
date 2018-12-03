@@ -78,7 +78,7 @@ model.compile(
 	)
 
 
-model.fit_generator(
+history = model.fit_generator(
 	traindata,
 	steps_per_epoch = 10,
 	epochs = 10,
@@ -107,3 +107,26 @@ print(results)
 
 
 #model.save('100msWindow.h5')
+
+makeplots = False
+
+if makeplots == True:
+	import matplotlib.pyplot as plt
+
+	# Plot training & validation accuracy values
+	plt.plot(history.history['acc'])
+	plt.plot(history.history['val_acc'])
+	plt.title('Model accuracy')
+	plt.ylabel('Accuracy')
+	plt.xlabel('Epoch')
+	plt.legend(['Train', 'Validate'], loc='upper left')
+	plt.show()
+
+	# Plot training & validation loss values
+	plt.plot(history.history['loss'])
+	plt.plot(history.history['val_loss'])
+	plt.title('Model loss')
+	plt.ylabel('Loss')
+	plt.xlabel('Epoch')
+	plt.legend(['Train', 'Validate'], loc='upper left')
+	plt.show()
