@@ -1,5 +1,5 @@
-timefile=./nonbuzz_starts
-soundfile=Colony3Day170.wav
+timefile=./B3D176nonbuzzes.txt
+soundfile=Box3Day176.wav
 
 window=0.1
 
@@ -7,7 +7,8 @@ obsnum=`cat $timefile | uniq | wc -l`
 lim1=`echo $obsnum*0.75 | bc`
 lim2=`echo $obsnum*0.9 | bc`
 
-n=1
+
+n=121
 for i in `cat $timefile | uniq`;
 	do 
 		echo sox processing nonbuzz $n from $soundfile at time point $i
@@ -27,9 +28,8 @@ for i in `cat $timefile | uniq`;
 exit
 
 
-timefile=./buzz_starts
+timefile=./nonbuzz_starts.txt
 soundfile=Colony3Day170.wav
-
 
 obsnum=`cat $timefile | uniq | wc -l`
 n=1

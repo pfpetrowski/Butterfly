@@ -15,7 +15,7 @@ traindata = train_images.flow_from_directory(
 	'./Data/Noisered100ms/Train',
 	color_mode = 'grayscale',
 	target_size = (100, 100),
-	batch_size = 64,
+	batch_size = 74,
 	class_mode = 'binary')
 
 
@@ -23,12 +23,12 @@ valdata = val_images.flow_from_directory(
 	'./Data/Noisered100ms/Validate',
 	color_mode = 'grayscale',
 	target_size = (100, 100),
-	batch_size = 32,
+	batch_size = 40,
 	class_mode = 'binary')
 
 import numpy
 numpy.set_printoptions(threshold=numpy.nan)
-import matplotlib.pyplot as plt
+import  matplotlib.pyplot as plt ## Sometimes Causes 'core dump error' for some reason. Might have to do with tensorflow-gpu
 from keras.preprocessing import image
 
 # # for i, j in valdata:
@@ -80,31 +80,46 @@ model.compile(
 
 history = model.fit_generator(
 	traindata,
-	steps_per_epoch = 10,
-	epochs = 10,
+	steps_per_epoch = 4,
+	epochs = 15,
 	validation_data = valdata,
-	validation_steps = 5,
+	validation_steps = 1,
 	shuffle = True)
 
 
 test_images = ImageDataGenerator(rescale=1./255)
-testdata = val_images.flow_from_directory(
+testdata = test_images.flow_from_directory(
 	'./Data/Noisered100ms/Test',
 	color_mode = 'grayscale',
 	target_size = (100, 100),
-	batch_size = 123,
+	batch_size = 100,
 	class_mode = 'binary')
 
 
-# quit()
-results = model.evaluate_generator(
-	testdata,
-	steps = 1,
+
+# results = model.evaluate_generator(
+# 	testdata,
+# 	steps = 1,
+# 	verbose = 1)
+
+# print(model.metrics_names)
+# print(results)
+
+
+x,y_true = testdata.next()
+
+
+y_pred = model.predict(
+	x,
 	verbose = 1)
+y_pred = y_pred.round()
 
-print(model.metrics_names)
-print(results)
+# for i in range(100):
+# 	print(y_true[i], y_pred[i])
 
+from sklearn import metrics
+confusion_matrix = metrics.confusion_matrix(y_true,y_pred)
+print(confusion_matrix)
 
 #model.save('100msWindow.h5')
 
